@@ -42,7 +42,7 @@ http {
     root /sources/web/public;
 
     # try to serve static file first
-    try_files $uri $uri/ $uri/index.html $uri.html @app;
+    try_files $uri $uri/index.html $uri.html @app;
 
     location @app {
       proxy_redirect off;
