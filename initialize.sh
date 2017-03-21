@@ -3,7 +3,15 @@ cat /tmp/nginx.conf.template \
   | \
     envsubst '\
     \$API_DOMAIN \
+    \$API_SOCK_PATH \
+    \$API_ASSETS_PATH \
+
+    \$ADMIN_DOMAIN \
+    \$ADMIN_SOCK_PATH \
+    \$ADMIN_ASSETS_PATH \
+
     \$FRONT_DOMAIN \
+
     \$SOCK_FILE \
     \$ERRBIT_DOMAIN \
     \$ERRBIT_HOST \
