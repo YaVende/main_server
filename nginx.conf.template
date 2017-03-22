@@ -41,7 +41,7 @@ http {
 
     root ${API_ASSETS_PATH};
 
-    try_files @app;
+    try_files $uri $uri/index.html $uri.html @app;
 
     location @app {
       proxy_redirect off;
