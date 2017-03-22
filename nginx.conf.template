@@ -31,15 +31,43 @@ http {
   gzip on;
   gzip_disable "msie6";
 
-  upstream default_upstream {
-    server unix:///tmp/socks/app.sock fail_timeout=0;
+  upstream api_upstream {
+    server unix://${API_SOCK_PATH} fail_timeout=0;
   }
 
   server {
     listen 80;
     server_name ${API_DOMAIN};
 
-    root /sources/web/public;
+    root ${API_ASSETS_PATH};
+
+    try_files $uri $uri/index.html $uri.html @app;
+
+    location @app {
+      proxy_redirect off;
+
+      proxy_set_header Host $http_host;
+      proxy_set_header X-Forward-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-Forwarded-Proto $scheme;
+      proxy_set_header X-Real-IP $remote_addr;
+
+      proxy_pass http://api_upstream;
+    }
+
+    error_page 500 502 503 504 /500.html;
+    client_max_body_size 4G;
+    keepalive_timeout 10;
+  }
+
+  upstream admin_upstream {
+    server unix://${ADMIN_SOCK_PATH} fail_timeout=0;
+  }
+
+  server {
+    listen 80;
+    server_name ${ADMIN_DOMAIN};
+
+    root ${ADMIN_ASSETS_PATH};
 
     # try to serve static file first
     try_files $uri $uri/index.html $uri.html @app;
@@ -52,7 +80,8 @@ http {
       proxy_set_header X-Forwarded-Proto $scheme;
       proxy_set_header X-Real-IP $remote_addr;
 
-      proxy_pass http://default_upstream;
+
+      proxy_pass http://admin_upstream;
     }
 
     error_page 500 502 503 504 /500.html;
