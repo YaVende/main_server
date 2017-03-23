@@ -92,7 +92,7 @@ http {
   # Redirect to non-www
   server {
     listen 80;
-    server_name www.${FRONT_DOMAIN}
+    server_name www.${FRONT_DOMAIN};
     return 301 $scheme://${FRONT_DOMAIN}$request_uri;
   }
 
