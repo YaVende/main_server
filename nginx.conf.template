@@ -89,6 +89,13 @@ http {
     keepalive_timeout 10;
   }
 
+  # Redirect to non-www
+  server {
+    listen 80;
+    server_name www.${FRONT_DOMAIN};
+    return 301 $scheme://${FRONT_DOMAIN}$request_uri;
+  }
+
   server {
     listen      80;
     server_name ${FRONT_DOMAIN};
@@ -97,6 +104,7 @@ http {
     gzip_disable "msie6";
     gzip_vary on;
     gzip_proxied any;
+
     gzip_comp_level 9;
     gzip_buffers 16 8k;
     gzip_http_version 1.1;
