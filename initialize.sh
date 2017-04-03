@@ -2,21 +2,26 @@
 cat /tmp/nginx.conf.template \
   | \
     envsubst '\
-    \$API_DOMAIN \
-    \$API_SOCK_PATH \
-    \$API_ASSETS_PATH \
-
+    \$ADMIN_ASSETS_PATH \
     \$ADMIN_DOMAIN \
     \$ADMIN_SOCK_PATH \
-    \$ADMIN_ASSETS_PATH \
 
-    \$FRONT_DOMAIN \
+    \$API_ASSETS_PATH \
+    \$API_DOMAIN \
+    \$API_SOCK_PATH \
 
-    \$SOCK_FILE \
     \$ERRBIT_DOMAIN \
     \$ERRBIT_HOST \
+
+    \$FRONT_DOMAIN \
+    \$FRONT_ASSETS_PATH \
+
     \$PGADMIN_DOMAIN \
     \$PGADMIN_HOST \
+
+    \$SOCK_FILE \
+
+    \$PRERENDER_HOST \
   ' \
   > /etc/nginx/nginx.conf
 
