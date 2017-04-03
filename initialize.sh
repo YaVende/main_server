@@ -14,13 +14,14 @@ cat /tmp/nginx.conf.template \
     \$ERRBIT_HOST \
 
     \$FRONT_DOMAIN \
+    \$FRONT_ASSETS_PATH \
 
     \$PGADMIN_DOMAIN \
     \$PGADMIN_HOST \
 
     \$SOCK_FILE \
 
-    \$PRERENDERHOST \
+    \$PRERENDER_HOST \
   ' \
   > /etc/nginx/nginx.conf
 

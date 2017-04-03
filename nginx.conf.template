@@ -99,6 +99,7 @@ http {
   server {
     listen      80;
     server_name ${FRONT_DOMAIN};
+    root ${FRONT_ASSETS_PATH};
 
     gzip on;
     gzip_disable "msie6";
@@ -110,16 +111,33 @@ http {
     gzip_http_version 1.1;
     gzip_types text/plain text/css application/json application/x-javascript application/javascript text/xml application/xml application/xml+rss text/javascript image/png image/svg+xml;
 
+    location ~ /\. {
+        deny all;
+    }
+
     location / {
       autoindex on;
-      root /sources/front/public;
-      try_files $uri $uri/ /index.html =404;
+      try_files $uri @prerender;
+    }
 
-      #location ~* \.(css|js|png|gif|jpg|svg|html)$ {
-        #expires max;
-        #add_header Pragma public;
-        #add_header Cache-Control "public";
-      #}
+    location @prerender {
+      #proxy_set_header X-Prerender-Token YOUR_TOKEN;
+
+      set $prerender 0;
+
+      if ($http_user_agent ~* "googlebot|yahoo|bingbot|baiduspider|yandex|yeti|yodaobot|gigabot|ia_archiver|facebookexternalhit|twitterbot|developers\.google\.com") {
+        set $prerender 1;
+      }
+
+      if ($args ~ "_escaped_fragment_|prerender=1") { set $prerender 1; }
+      if ($http_user_agent ~ "Prerender") { set $prerender 0; }
+
+      if ($prerender = 1) {
+        rewrite .* /$scheme://$host$request_uri? break;
+        proxy_pass ${PRERENDER_HOST};
+      }
+
+      if ($prerender = 0) { rewrite .* /index.html break; }
     }
 
     location @prerender {
