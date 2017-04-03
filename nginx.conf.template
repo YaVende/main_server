@@ -121,6 +121,26 @@ http {
         #add_header Cache-Control "public";
       #}
     }
+
+    location @prerender {
+      #proxy_set_header X-Prerender-Token YOUR_TOKEN;
+
+      set $prerender 0;
+
+      if ($http_user_agent ~* "googlebot|yahoo|bingbot|baiduspider|yandex|yeti|yodaobot|gigabot|ia_archiver|facebookexternalhit|twitterbot|developers\.google\.com") {
+        set $prerender 1;
+      }
+
+      if ($args ~ "_escaped_fragment_|prerender=1") { set $prerender 1; }
+      if ($http_user_agent ~ "Prerender") { set $prerender 0; }
+
+      if ($prerender = 1) {
+        rewrite .* /$scheme://$host$request_uri? break;
+        proxy_pass ${PRERENDER_HOST};
+      }
+
+      if ($prerender = 0) { rewrite .* /index.html break; }
+    }
   }
 
   server {
