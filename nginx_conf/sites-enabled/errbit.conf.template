@@ -1,0 +1,9 @@
+server {
+  listen 80;
+  server_name ${ERRBIT_DOMAIN};
+
+  location / {
+    include '/etc/nginx/snippets/proxy.conf';
+    proxy_pass ${ERRBIT_HOST};
+  }
+}

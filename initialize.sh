@@ -1,29 +1,42 @@
 #!/bin/bash
-cat /tmp/nginx.conf.template \
-  | \
-    envsubst '\
-    \$ADMIN_ASSETS_PATH \
-    \$ADMIN_DOMAIN \
-    \$ADMIN_SOCK_PATH \
 
-    \$API_ASSETS_PATH \
-    \$API_DOMAIN \
-    \$API_SOCK_PATH \
+# For each file in /tmp/nginx_conf that ends with '.template',
+# replace env variables using envsubst, and remove the source template.
+# Then merge the contents of /tmp/nginx_conf into /etc/nginx
 
-    \$ERRBIT_DOMAIN \
-    \$ERRBIT_HOST \
+for f in $(find /tmp/nginx_conf | grep "\.template$"); do
+  cat $f \
+    | \
+      envsubst '\
+      \$ACME_CHALLENGE_PATH \
+ 
+      \$ADMIN_ASSETS_PATH   \
+      \$ADMIN_DOMAIN        \
+      \$ADMIN_SOCK_PATH     \
 
-    \$FRONT_DOMAIN \
-    \$FRONT_ASSETS_PATH \
+      \$API_ASSETS_PATH     \
+      \$API_DOMAIN          \
+      \$API_SOCK_PATH       \
 
-    \$PGADMIN_DOMAIN \
-    \$PGADMIN_HOST \
+      \$ERRBIT_DOMAIN       \
+      \$ERRBIT_HOST         \
 
-    \$SOCK_FILE \
+      \$FRONT_DOMAIN        \
+      \$FRONT_ASSETS_PATH   \
 
-    \$PRERENDER_HOST \
-  ' \
-  > /etc/nginx/nginx.conf
+      \$PGADMIN_DOMAIN      \
+      \$PGADMIN_HOST        \
+
+      \$SOCK_FILE           \
+
+      \$PRERENDER_HOST      \
+    ' \
+    > ${f%.template}
+
+  rm $f
+done
+
+rsync -ra /tmp/nginx_conf/* /etc/nginx/
 
 echo "This is what /etc/nginx/nginx.conf looks like:"
 cat /etc/nginx/nginx.conf

@@ -1,0 +1,16 @@
+upstream api_upstream {
+  server unix://${API_SOCK_PATH} fail_timeout=0;
+}
+
+server {
+  include '/etc/nginx/snippets/rails_app.conf';
+  include '/etc/nginx/snippets/acme_challenge.conf';
+
+  server_name ${API_DOMAIN};
+
+  location @app {
+    include '/etc/nginx/snippets/proxy.conf';
+    root ${API_ASSETS_PATH};
+    proxy_pass http://api_upstream;
+  }
+}

@@ -1,0 +1,16 @@
+upstream admin_upstream {
+  server unix://${ADMIN_SOCK_PATH} fail_timeout=0;
+}
+
+server {
+  include '/etc/nginx/snippets/rails_app.conf';
+  include '/etc/nginx/snippets/acme_challenge.conf';
+
+  server_name ${ADMIN_DOMAIN};
+
+  location @app {
+    include '/etc/nginx/snippets/proxy.conf';
+    root ${ADMIN_ASSETS_PATH};
+    proxy_pass http://admin_upstream;
+  }
+}

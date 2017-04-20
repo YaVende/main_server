@@ -1,0 +1,38 @@
+# Redirect to non-www
+server {
+  listen 80;
+  server_name www.${FRONT_DOMAIN};
+  return 301 $scheme://${FRONT_DOMAIN}$request_uri;
+}
+
+server {
+  listen      80;
+  server_name ${FRONT_DOMAIN};
+  root ${FRONT_ASSETS_PATH};
+
+  include '/etc/nginx/snippets/acme_challenge.conf';
+  include '/etc/nginx/snippets/gzip.conf';
+
+  location / {
+    autoindex on;
+    try_files $uri @prerender;
+  }
+
+  location @prerender {
+    set $prerender 0;
+
+    if ($http_user_agent ~* "googlebot|yahoo|bingbot|baiduspider|yandex|yeti|yodaobot|gigabot|ia_archiver|facebookexternalhit|twitterbot|developers\.google\.com") {
+      set $prerender 1;
+    }
+
+    if ($args ~ "_escaped_fragment_|prerender=1") { set $prerender 1; }
+    if ($http_user_agent ~ "Prerender") { set $prerender 0; }
+
+    if ($prerender = 1) {
+      rewrite .* /$scheme://$host$request_uri? break;
+      proxy_pass ${PRERENDER_HOST};
+    }
+
+    if ($prerender = 0) { rewrite .* /index.html break; }
+  }
+}
