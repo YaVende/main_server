@@ -30,6 +30,10 @@ for f in $(find /tmp/nginx_conf | grep "\.template$"); do
       \$SOCK_FILE           \
 
       \$PRERENDER_HOST      \
+
+      \$SSL_CERTIFICATE     \
+      \$SSL_CERTIFICATE_KEY \
+
     ' \
     > ${f%.template}
 
