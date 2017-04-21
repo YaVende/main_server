@@ -4,9 +4,7 @@ upstream admin_upstream {
 
 server {
   server_name ${ADMIN_DOMAIN};
-  listen 80;
-  listen [::]:80;
-  return 302 https://$server_name$request_uri;
+  include '/etc/nginx/snippets/acme_challenge.conf';
 }
 
 server {
