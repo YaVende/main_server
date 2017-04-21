@@ -7,4 +7,6 @@ COPY nginx_conf /tmp/nginx_conf
 COPY initialize.sh /tmp/initialize.sh
 COPY misc/* /etc/self_signed_certs/
 
+RUN openssl dhparam -out /etc/ssl/certs/dhparam.pem 4096
+
 CMD "/tmp/initialize.sh"
