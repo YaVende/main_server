@@ -33,7 +33,6 @@ for f in $(find /tmp/nginx_conf | grep "\.template$"); do
 
       \$SSL_CERTIFICATE     \
       \$SSL_CERTIFICATE_KEY \
-
     ' \
     > ${f%.template}
 
@@ -41,7 +40,7 @@ for f in $(find /tmp/nginx_conf | grep "\.template$"); do
 done
 
 rsync -ra /tmp/nginx_conf/* /etc/nginx/
-rsync -ra /tmp/certs $SSL_DIRS_PATH
+rsync -ra /tmp/certs/* $SSL_CERTS_PATH/
 
 echo "This is what /etc/nginx/nginx.conf looks like:"
 cat /etc/nginx/nginx.conf
