@@ -48,4 +48,11 @@ cat /etc/nginx/nginx.conf
 ln -sf /dev/stdout $ACCESS_LOG
 ln -sf /dev/stdout $ERROR_LOG
 
+# Wait for the SSL certificates provided via volume to be mounted
+# Fuck you docker.
+while [ ! -f $SSL_CERTIFICATE ] || [ ! -f $SSL_CERTIFICATE_KEY ]
+do
+  sleep 2
+done
+
 nginx -g 'daemon off;'
