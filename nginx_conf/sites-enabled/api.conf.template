@@ -15,9 +15,10 @@ server {
   listen 443 ssl http2;
   listen [::]:443 ssl http2;
 
+  root ${API_ASSETS_PATH};
+
   location @app {
     include '/etc/nginx/snippets/proxy.conf';
-    root ${API_ASSETS_PATH};
     proxy_pass http://api_upstream;
   }
 }
