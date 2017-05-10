@@ -3,21 +3,27 @@ upstream api_upstream {
 }
 
 server {
-  server_name ${API_DOMAIN};
-  include '/etc/nginx/snippets/acme_challenge.conf';
+  server_name www.${API_DOMAIN};
+  return 301 https://${API_DOMAIN};
 }
 
 server {
-  include '/etc/nginx/snippets/rails_app.conf';
-  include '/etc/nginx/snippets/https.conf';
-
   server_name ${API_DOMAIN};
-  listen 443 ssl http2;
-  listen [::]:443 ssl http2;
+  listen 80;
+  listen [::]:80;
+  error_page 500 502 503 504 /500.html;
+  client_max_body_size 4G;
+  keepalive_timeout 10;
+
+  root ${API_ASSETS_DIR};
+  try_files $uri $uri/index.html $uri.html @app;
 
   location @app {
-    include '/etc/nginx/snippets/proxy.conf';
-    root ${API_ASSETS_PATH};
+    proxy_redirect off;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-Forward-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Real-IP $remote_addr;
     proxy_pass http://api_upstream;
   }
 }
