@@ -5,15 +5,14 @@ upstream admin_upstream {
 server {
   server_name ${ADMIN_DOMAIN};
   include '/etc/nginx/snippets/acme_challenge.conf';
+  include '/etc/nginx/snippets/redirect_to_https.conf';
 }
 
 server {
+  server_name ${ADMIN_DOMAIN};
+
   include '/etc/nginx/snippets/rails_app.conf';
   include '/etc/nginx/snippets/https.conf';
-
-  server_name ${ADMIN_DOMAIN};
-  listen 443 ssl http2;
-  listen [::]:443 ssl http2;
 
   root ${ADMIN_ASSETS_PATH};
 

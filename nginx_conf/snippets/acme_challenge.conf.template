@@ -14,7 +14,3 @@ location ^~ /.well-known/acme-challenge/ {
 location = /\.well-known/acme-challenge/ {
   return 404;
 }
-
-location / {
-  return 302 https://$server_name$request_uri;
-}

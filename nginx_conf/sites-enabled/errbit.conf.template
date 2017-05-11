@@ -1,6 +1,12 @@
 server {
-  listen 80;
   server_name ${ERRBIT_DOMAIN};
+  include '/etc/nginx/snippets/acme_challenge.conf';
+  include '/etc/nginx/snippets/redirect_to_https.conf';
+}
+
+server {
+  server_name ${ERRBIT_DOMAIN};
+  include '/etc/nginx/snippets/https.conf';
 
   location / {
     include '/etc/nginx/snippets/proxy.conf';

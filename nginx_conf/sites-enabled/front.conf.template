@@ -1,23 +1,26 @@
-# Redirect to non-www
+server {
+  server_name ${FRONT_DOMAIN} www.${FRONT_DOMAIN};
+  include '/etc/nginx/snippets/acme_challenge.conf';
+
+  location / {
+    return 302 https://${FRONT_DOMAIN};
+  }
+}
+
 server {
   server_name www.${FRONT_DOMAIN};
-  include '/etc/nginx/snippets/acme_challenge.conf';
-}
-
-server {
-  server_name ${FRONT_DOMAIN};
-  include '/etc/nginx/snippets/acme_challenge.conf';
-}
-
-server {
-  server_name ${FRONT_DOMAIN};
   listen 443 ssl http2;
   listen [::]:443 ssl http2;
+  return 302 https://${FRONT_DOMAIN};
+}
 
-  root ${FRONT_ASSETS_PATH};
+server {
+  server_name ${FRONT_DOMAIN};
 
   include '/etc/nginx/snippets/https.conf';
   include '/etc/nginx/snippets/gzip.conf';
+
+  root ${FRONT_ASSETS_PATH};
 
   location / {
     autoindex on;

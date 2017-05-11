@@ -1,6 +1,13 @@
 server {
-  listen 80;
   server_name ${PGADMIN_DOMAIN};
+  include '/etc/nginx/snippets/acme_challenge.conf';
+  include '/etc/nginx/snippets/redirect_to_https.conf';
+}
+
+server {
+  server_name ${PGADMIN_DOMAIN};
+
+  include '/etc/nginx/snippets/https.conf';
 
   auth_basic 'yavende_production';
   auth_basic_user_file /etc/nginx/conf/htpasswd;

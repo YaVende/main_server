@@ -5,6 +5,7 @@ upstream api_upstream {
 server {
   server_name ${API_DOMAIN};
   include '/etc/nginx/snippets/acme_challenge.conf';
+  include '/etc/nginx/snippets/redirect_to_https.conf';
 }
 
 server {
@@ -12,8 +13,6 @@ server {
   include '/etc/nginx/snippets/https.conf';
 
   server_name ${API_DOMAIN};
-  listen 443 ssl http2;
-  listen [::]:443 ssl http2;
 
   root ${API_ASSETS_PATH};
 
