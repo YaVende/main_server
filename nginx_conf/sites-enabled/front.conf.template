@@ -1,6 +1,9 @@
 server {
   server_name ${FRONT_DOMAIN} www.${FRONT_DOMAIN};
+  root ${FRONT_ASSETS_PATH};
+
   include '/etc/nginx/snippets/acme_challenge.conf';
+  include '/etc/nginx/snippets/appcache.conf';
 
   location / {
     return 301 https://${FRONT_DOMAIN}$request_uri;
@@ -16,11 +19,11 @@ server {
 
 server {
   server_name ${FRONT_DOMAIN};
+  root ${FRONT_ASSETS_PATH};
 
   include '/etc/nginx/snippets/https.conf';
   include '/etc/nginx/snippets/gzip.conf';
-
-  root ${FRONT_ASSETS_PATH};
+  include '/etc/nginx/snippets/appcache.conf';
 
   location / {
     autoindex on;
