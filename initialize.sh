@@ -24,6 +24,9 @@ for f in $(find /tmp/nginx_conf | grep "\.template$"); do
       \$FRONT_DOMAIN        \
       \$FRONT_ASSETS_PATH   \
 
+      \$JOBS_DOMAIN        \
+      \$JOBS_ASSETS_PATH   \
+
       \$PGADMIN_DOMAIN      \
       \$PGADMIN_HOST        \
 

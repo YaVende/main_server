@@ -24,27 +24,5 @@ server {
   include '/etc/nginx/snippets/https.conf';
   include '/etc/nginx/snippets/gzip.conf';
   include '/etc/nginx/snippets/appcache.conf';
-
-  location / {
-    autoindex on;
-    try_files $uri @prerender;
-  }
-
-  location @prerender {
-    set $prerender 0;
-
-    if ($http_user_agent ~* "googlebot|yahoo|bingbot|baiduspider|yandex|yeti|yodaobot|gigabot|ia_archiver|facebookexternalhit|twitterbot|developers\.google\.com") {
-      set $prerender 1;
-    }
-
-    if ($args ~ "_escaped_fragment_|prerender=1") { set $prerender 1; }
-    if ($http_user_agent ~ "Prerender") { set $prerender 0; }
-
-    if ($prerender = 1) {
-      rewrite .* /$scheme://$host$request_uri? break;
-      proxy_pass ${PRERENDER_HOST};
-    }
-
-    if ($prerender = 0) { rewrite .* /index.html break; }
-  }
+  include '/etc/nginx/snippets/prerender.conf';
 }

@@ -1,0 +1,20 @@
+server {
+  server_name ${JOBS_DOMAIN};
+
+  include '/etc/nginx/snippets/acme_challenge.conf';
+  include '/etc/nginx/snippets/appcache.conf';
+
+  location / {
+    return 301 https://${JOBS_DOMAIN}$request_uri;
+  }
+}
+
+server {
+  server_name ${JOBS_DOMAIN};
+  root ${JOBS_ASSETS_PATH};
+
+  include '/etc/nginx/snippets/https.conf';
+  include '/etc/nginx/snippets/gzip.conf';
+  include '/etc/nginx/snippets/appcache.conf';
+  include '/etc/nginx/snippets/prerender.conf';
+}
