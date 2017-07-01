@@ -12,7 +12,7 @@
 declare required_vars="\
   $(cat /tmp/required_vars)
   \$ACME_CHALLENGE_PATH
-  \$SSL_CERTS_PATH
+  \$SSL_CERTS_DIR
   \$SSL_CERTIFICATE
   \$SSL_CERTIFICATE_KEY
 "
@@ -31,7 +31,7 @@ for f in $(find /tmp/nginx_conf | grep "\.template$"); do
 done
 
 rsync -ra /tmp/nginx_conf/* /etc/nginx/
-rsync -ra /tmp/certs/* $SSL_CERTS_PATH/
+rsync -ra /tmp/certs/* $SSL_CERTS_DIR/
 
 ln -sf /dev/stdout $ACCESS_LOG
 ln -sf /dev/stdout $ERROR_LOG
