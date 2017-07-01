@@ -4,39 +4,10 @@
 # replace env variables using envsubst, and remove the source template.
 # Then merge the contents of /tmp/nginx_conf into /etc/nginx
 
+declare -a accepted_vars=$(cat /tmp/accepted_vars.yml)
+
 for f in $(find /tmp/nginx_conf | grep "\.template$"); do
-  cat $f \
-    | \
-      envsubst '\
-      \$ACME_CHALLENGE_PATH \
- 
-      \$ADMIN_ASSETS_PATH   \
-      \$ADMIN_DOMAIN        \
-      \$ADMIN_SOCK_PATH     \
-
-      \$API_ASSETS_PATH     \
-      \$API_DOMAIN          \
-      \$API_SOCK_PATH       \
-
-      \$ERRBIT_DOMAIN       \
-      \$ERRBIT_HOST         \
-
-      \$FRONT_DOMAIN        \
-      \$FRONT_ASSETS_PATH   \
-
-      \$JOBS_DOMAIN        \
-      \$JOBS_ASSETS_PATH   \
-
-      \$PGADMIN_DOMAIN      \
-      \$PGADMIN_HOST        \
-
-      \$SOCK_FILE           \
-
-      \$PRERENDER_HOST      \
-
-      \$SSL_CERTIFICATE     \
-      \$SSL_CERTIFICATE_KEY \
-    ' \
+  cat $f | envsubst $() \
     > ${f%.template}
 
   rm $f
