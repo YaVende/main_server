@@ -31,8 +31,6 @@ for f in $(find /tmp/nginx_conf | grep "\.template$"); do
 done
 
 rsync -ra /tmp/nginx_conf/* /etc/nginx/
-
-mkdir -p $SSL_CERTS_DIR
 rsync -ra /tmp/certs/* $SSL_CERTS_DIR/
 
 ln -sf /dev/stdout $ACCESS_LOG
