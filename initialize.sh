@@ -26,7 +26,7 @@ IFS=' '; read -a non_prefixed_var_names <<< $(
 
 for var_name in "${non_prefixed_var_names[@]}"
 do
-  if [[ -v $var_name ]]; then
+  if [[ ! -v $var_name ]]; then
     echo "Missing environment variable $var_name"
     exit 1
   fi
