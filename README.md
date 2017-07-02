@@ -1,3 +1,5 @@
+[![build status](https://gitlab.alfred.yavende.com/dev_ops/main_server/badges/master/build.svg)](https://gitlab.alfred.yavende.com/dev_ops/main_server/commits/master)
+
 # Main Server
 
 This is a dockerized nginx image meant to be used as a base for any main server.
