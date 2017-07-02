@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -f
 
 # For each file in /tmp/nginx_conf that ends with '.template',
 # replace env variables using envsubst, and remove the source template.
@@ -23,6 +23,8 @@ IFS=' '; read -a non_prefixed_var_names <<< $(
     | sed ':a;N;$!ba;s/\n/ /g' \
     | sed 's/\$//g' \
 )
+
+unset IFS # fuck you bash
 
 for var_name in "${non_prefixed_var_names[@]}"
 do
