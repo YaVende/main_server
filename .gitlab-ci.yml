@@ -15,5 +15,6 @@ build_image:
     - /^v\d+\.\d+\.\d+$/
 
   script:
-    - docker build -t --pull $IMAGE_NAME .
+    - docker pull $(awk '/^FROM\s/ { print /:/ ? $2 : $2":latest" }' Dockerfile)
+    - docker build -t $IMAGE_NAME .
     - docker push $IMAGE_NAME
