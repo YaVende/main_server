@@ -17,9 +17,16 @@ declare required_vars="\
   \$SSL_CERTIFICATE_KEY
 "
 
-for var_name in "${required_vars[@]}"
+# Remove dollar sign in variable name and store all var names in an array
+IFS=' '; read -a non_prefixed_var_names <<< $(
+  echo $required_vars \
+    | sed ':a;N;$!ba;s/\n/ /g' \
+    | sed 's/\$//g' \
+)
+
+for var_name in "${non_prefixed_var_names[@]}"
 do
-  if [ -z "$(eval "echo \$$var_name")" ]; then
+  if [[ -v $var_name ]]; then
     echo "Missing environment variable $var_name"
     exit 1
   fi
