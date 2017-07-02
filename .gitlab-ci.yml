@@ -15,5 +15,5 @@ build_image:
     - /^v\d+\.\d+\.\d+$/
 
   script:
-    - docker build -t $IMAGE_NAME .
+    - docker build -t --pull $IMAGE_NAME .
     - docker push $IMAGE_NAME
