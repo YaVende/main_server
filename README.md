@@ -16,9 +16,7 @@ This is a dockerized nginx image meant to be used as a base for any main server.
   - Configuration for rails apps
 
 ### Configuration
-Files are configured via `enbsubst`. To add configurable teplates, extend this image.
-
-All files in `/tmp/nginx_conf/**/*.template` will be replaced via `enbsubst`, using a list of variables you should include in the file /tmp/required_vars with this format:
+All files in `/tmp/nginx_conf/**/*.template` will be replaced via `enbsubst`, using a list of variables you should include in the file `/tmp/required_vars` with this format:
 
 ~~~
 $REQUIRED_VAR_NAME_1
@@ -26,7 +24,9 @@ $REQUIRED_VAR_NAME_2
 $REQUIRED_VAR_NAME_3
 ~~~
 
-Extend this image to add this files. Example:
+Then the folder `/tmp/nginx_conf` will be merged into `/etc/nginx`.
+
+Example usage:
 
 ~~~Dockerfile
 FROM registry.alfred.yavende.com/dev_ops/main_server:development
