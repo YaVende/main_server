@@ -11,7 +11,7 @@
 # $VAR2
 declare required_vars="\
   $(cat /tmp/required_vars)
-  \$ACME_CHALLENGE_PATH
+  \$ACME_CHALLENGE_DIR
   \$SSL_CERTS_DIR
   \$SSL_CERTIFICATE
   \$SSL_CERTIFICATE_KEY
