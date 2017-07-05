@@ -1,4 +1,4 @@
-#!/bin/bash -f
+#!/bin/bash
 
 # For each file in /tmp/nginx_conf that ends with '.template',
 # replace env variables using envsubst, and remove the source template.
