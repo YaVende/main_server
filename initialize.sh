@@ -15,6 +15,7 @@ declare required_vars="\
   \$SSL_CERTS_DIR
   \$SSL_CERTIFICATE
   \$SSL_CERTIFICATE_KEY
+  \$PRERENDER_HOST
 "
 
 # Remove dollar sign in variable name and store all var names in an array
